@@ -36,7 +36,7 @@
           <div class="section-body">
             <div class="card">
               <div class="card-header">
-                <h4>A3!シュミレーター</h4>
+                <h4>A3! ガチャ影響度シュミレーター</h4>
               </div>
               <div class="card-body">
                 <canvas id="myChart"></canvas>
@@ -56,8 +56,8 @@
     <script src="/js/Chart.min.js"></script>
 <?php
 $url = 'http://3.135.100.240:5000/api';
-// $json = file_get_contents($url);
-$json = '{"a": "15", "b": "50", "c": "100", "d": "75"}';
+$json = file_get_contents($url);
+// $json = '{"a": "15", "b": "50", "c": "100", "d": "75"}';
 $arr = json_decode($json, true);
 $labels = json_encode(array_keys($arr));
 $data = json_encode(array_values($arr));
@@ -69,11 +69,9 @@ $data = json_encode(array_values($arr));
       type: 'bar',
       data: {
         labels: <?php echo $labels; ?>,
-
           // labels: ["1", "2", "3", "4", "5", "6", "7"],
         datasets: [{
-          label: 'Statistics',
-          // data: [460, 458, 330, 502, 430, 610, 488],
+          label: 'A3シュミレーション',
           data: <?php echo $data; ?>,
           borderWidth: 2,
           backgroundColor: '#6777ef',
@@ -89,13 +87,13 @@ $data = json_encode(array_values($arr));
         },
         scales: {
           yAxes: [{
+              title: 'ガチャ影響度',
             gridLines: {
               drawBorder: false,
               color: '#f2f2f2',
             },
             ticks: {
               beginAtZero: true,
-              // stepSize: 20
             }
           }],
           xAxes: [{
@@ -106,6 +104,18 @@ $data = json_encode(array_values($arr));
               display: false
             }
           }]
+        },
+        tooltips: {
+            titleFontSize: 15,
+            bodyFontSize: 15,
+            callbacks: {
+                title: function (tooltipItem, data){
+                    return "A3シュミレーター";
+                },
+                label: function (tooltipItem, data){
+                    return "影響度：" + tooltipItem.yLabel;
+                }
+            }
         },
       }
     });
